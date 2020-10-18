@@ -1,18 +1,29 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
+  <div>
+    <bounce-loader :loading="isLoading" :color="'#68d391'" :size="100" />
+    <px-assets-table v-if="!isLoading" :assets="assets"></px-assets-table>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import api from "@/api";
+import PxAssetsTable from "@/components/PxAssetsTable";
 
 export default {
-  name: "Home",
+  name: "home",
   components: {
-    HelloWorld
+    PxAssetsTable
+  },
+  data() {
+    return {
+      assets: [],
+      isLoading: false
+    };
+  },
+  created() {
+    this.isLoading = true;
+    api.getAssets().then(assets => (this.assets = assets))
+    .finally(()=> this.isLoading = false);
   }
 };
 </script>
